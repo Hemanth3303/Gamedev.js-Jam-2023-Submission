@@ -1,0 +1,16 @@
+body {
+	display: grid;
+	height: 100vh;
+	place-content: center;
+	overflow: hidden;
+	background-color: #121212;
+}
+
+#canvas {
+	background-color: black;
+	margin: auto;
+}
+
+.image {
+	display: none;
+}
