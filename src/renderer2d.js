@@ -33,4 +33,14 @@ class Renderer2D {
 	drawImage(image, x, y) {
 		this.ctx.drawImage(image, x, y);
 	}
+
+	// provide size in pixels
+	setFont(fontname, size) {
+		this.ctx.font=`${size}px ${fontname}`;
+	}
+
+	drawText(text, x, y, color) {
+		this.#beginDraw(color);
+		this.ctx.fillText(text, x, y);
+	}
 }

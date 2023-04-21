@@ -1,8 +1,8 @@
 import { Renderer2D } from "./renderer2d.js";
 import { loadImage } from "./utils.js";
+import { Vec2 } from "./vectors.js";
 
-let renderer, img;
-let x=150, y=100;
+let renderer
 
 let now, prev;
 let dt, fps;
@@ -14,26 +14,14 @@ function main() {
 	canvas.height=600;
 
 	renderer=new Renderer2D();
-	img=loadImage("assets/blob.png");
 	now=performance.now();
 	prev=performance.now();
 
-	gameLoop();
-
 	addEventListener("keydown", (e)=>{
-		if(e.key=='a') {
-			x-=1000*dt;
-		}
-		if(e.key=='d') {
-			x+=1000*dt;
-		}
-		if(e.key=='w') {
-			y-=1000*dt;
-		}
-		if(e.key=='s') {
-			y+=1000*dt;
-		}
-	})
+	
+	});
+
+	gameLoop();
 }
 
 function gameLoop() {
@@ -42,6 +30,7 @@ function gameLoop() {
 	dt=(now-prev)/1000;
 	fps=1/dt;
 	prev=now;
+	
 	update();
 
 	renderer.clearBackground();
@@ -54,11 +43,8 @@ function update() {
 }
 
 function render() {
-	renderer.drawRect(0, 0, 20, 50, "Cyan");
-	renderer.drawRect(120, 350, 80, 40, "Red");
-	renderer.drawRect(200, 120, 100, 10, "Yellow");
-	renderer.drawCircle(130, 30, 20, "Magenta");
-	renderer.drawImage(img, x, y);
+	renderer.setFont("Consolas", 30);
+	renderer.drawText(`FPS: ${Math.round(fps)}`, 10, 24, "Grey");
 }
 
 window.onload=main;
