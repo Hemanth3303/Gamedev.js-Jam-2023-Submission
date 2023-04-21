@@ -1,4 +1,5 @@
 import { Renderer2D } from "./renderer2d.js";
+import { loadImage } from "./utils.js";
 
 let renderer, img;
 let x=150, y=100;
@@ -13,7 +14,7 @@ function main() {
 	canvas.height=600;
 
 	renderer=new Renderer2D();
-	img=document.getElementsByClassName("image")[0];
+	img=loadImage("assets/blob.png");
 	now=performance.now();
 	prev=performance.now();
 
@@ -54,6 +55,8 @@ function update() {
 
 function render() {
 	renderer.drawRect(0, 0, 20, 50, "Cyan");
+	renderer.drawRect(120, 350, 80, 40, "Red");
+	renderer.drawRect(200, 120, 100, 10, "Yellow");
 	renderer.drawCircle(130, 30, 20, "Magenta");
 	renderer.drawImage(img, x, y);
 }
