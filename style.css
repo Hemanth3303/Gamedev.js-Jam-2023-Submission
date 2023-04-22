@@ -4,6 +4,12 @@ body {
 	place-content: center;
 	overflow: hidden;
 	background-color: #121212;
+	user-select: none;
+}
+
+#gameTitle {
+	justify-self: center;
+	color: #ffffff;
 }
 
 #canvas {

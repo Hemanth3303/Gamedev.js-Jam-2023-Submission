@@ -1,0 +1,4 @@
+export { WIN_WIDTH, WIN_HEIGHT };
+
+const WIN_WIDTH=600;
+const WIN_HEIGHT=600;
