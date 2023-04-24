@@ -9,6 +9,7 @@ let now, prev;
 let deltaTime, fps;
 let player;
 let bullets=[];
+let score=0;
 
 function main() {
 
@@ -18,7 +19,7 @@ function main() {
 	
 	renderer=new Renderer2D();
 	player=new Player(
-		new Vec2(100, 100), 
+		new Vec2(WIN_WIDTH/2-12.5, WIN_WIDTH/2-12.5), 
 		new Vec2(0, 0), 
 		new Vec2(25, 25), 
 		"Red", 
@@ -113,6 +114,7 @@ function render() {
 	renderer.setFont("Consolas", 24);
 	// renderer.drawText(`FPS: ${Math.round(fps)}`, 10, 24, "Grey");
 	renderer.drawText(`TimeScale: ${worldSpeedScale.value}`, 10, 24, "Cyan");
+	renderer.drawText(`Score: ${score}`, 450, 24, "Cyan");
 
 	player.render(renderer);
 
