@@ -1,5 +1,5 @@
 import { Vec2 } from "./vec2.js";
-import { WIN_WIDTH, WIN_HEIGHT, worldSpeedScale } from "./config.js";
+import { worldSpeedScale } from "./config.js";
 
 export { Bullet };
 

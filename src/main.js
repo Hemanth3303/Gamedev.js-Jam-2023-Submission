@@ -3,13 +3,16 @@ import { Renderer2D } from "./renderer2d.js";
 import { Vec2 } from "./vec2.js";
 import { Player } from "./player.js";
 import { Bullet } from "./bullet.js";
+import { Enemy } from "./enemy.js";
+import { getRandomValue, collision } from "./utils.js";
 
 let renderer;
 let now, prev;
 let deltaTime, fps;
 let player;
-let bullets=[];
-let score=0;
+let bullets=[], enemies=[];
+let score=0, enemyTimer=0;
+let gameOver=false;
 
 function main() {
 
@@ -84,21 +87,48 @@ function main() {
 }
 
 function gameLoop() {
-
-	now=performance.now();
-	deltaTime=(now-prev)/1000;
-	fps=1/deltaTime;
-	prev=now;
+	if(!gameOver) {
+		now=performance.now();
+		deltaTime=(now-prev)/1000;
+		fps=1/deltaTime;
+		prev=now;
+		
+		update(deltaTime);
 	
-	update(deltaTime);
-
-	renderer.clearBackground();
-	render();
-	requestAnimationFrame(gameLoop);
+		renderer.clearBackground();
+		render();
+		requestAnimationFrame(gameLoop);
+	}
 }
 
 function update(dt) {
 	// console.log(`deltaTime: ${dt}, FPS: ${fps}`);
+	enemyTimer+=dt;
+
+	if(enemyTimer>1.5) {
+		enemyTimer=0;
+		let x, y;
+		let size=getRandomValue(10, 25);
+		if(getRandomValue(0, 1)<0.5) {
+			x=getRandomValue(0, 1)<0.5?0-size:WIN_WIDTH+size;
+			y=getRandomValue(0, WIN_HEIGHT);
+		}
+		else {
+			x=getRandomValue(0, WIN_WIDTH);
+			y=getRandomValue(0, 1)<0.5?0-size:WIN_HEIGHT+size;
+		}
+
+		let angle=Math.atan2(player.pos.y-y, player.pos.x-x);
+
+		enemies.push(new Enemy(
+			new Vec2(x, y),
+			new Vec2(Math.cos(angle), Math.sin(angle)),
+			new Vec2(size, size),
+			"Magenta",
+			renderer
+		));
+	}
+	
 	player.update(dt);
 
 	bullets.forEach((bullet, index)=>{
@@ -107,6 +137,27 @@ function update(dt) {
 		if(bullet.pos.x<0 || bullet.pos.x>WIN_WIDTH || bullet.pos.y<0 || bullet.pos.y>WIN_HEIGHT) {
 			bullets.splice(index, 1);
 		}
+	});
+
+	enemies.forEach((enemy, index)=>{
+		let angle=Math.atan2(player.pos.y-enemy.pos.y, player.pos.x-enemy.pos.x);
+		enemy.vel.x=Math.cos(angle);
+		enemy.vel.y=Math.sin(angle);
+		enemy.update(dt);
+
+		if(collision(enemy, player)) {
+			gameOver=true;
+		}
+	});
+
+	enemies.forEach((enemy, enemyIndex)=>{
+		bullets.forEach((bullet, bulletIndex)=>{
+			if(collision(bullet, enemy)) {
+				bullets.splice(bulletIndex, 1);
+				enemies.splice(enemyIndex, 1);
+				score++;
+			}
+		});
 	});
 }
 
@@ -120,6 +171,10 @@ function render() {
 
 	bullets.forEach((bullet, index)=>{
 		bullet.render();
+	});
+
+	enemies.forEach((enemy, index)=>{
+		enemy.render();
 	});
 }
 
