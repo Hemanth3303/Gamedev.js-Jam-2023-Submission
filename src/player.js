@@ -1,4 +1,4 @@
-import { WIN_WIDTH, WIN_HEIGHT, worldSpeedScale } from "./config.js";
+import { WIN_WIDTH, WIN_HEIGHT } from "./config.js";
 
 export { Player };
 
@@ -11,7 +11,6 @@ class Player {
 		this.size=size;
 		this.color=color;
 		this.renderer=renderer;
-		this.bullets=[];
 	}
 
 	update(dt) {
@@ -28,11 +27,16 @@ class Player {
 			this.pos.y=0;
 		}
 
-		this.pos.x+=this.vel.x*PLAYER_SPEED*dt*worldSpeedScale.value;
-		this.pos.y+=this.vel.y*PLAYER_SPEED*dt*worldSpeedScale.value;
+		this.pos.x+=this.vel.x*PLAYER_SPEED*dt;
+		this.pos.y+=this.vel.y*PLAYER_SPEED*dt;
 	}
 
 	render() {
 		this.renderer.drawRect(this.pos.x, this.pos.y, this.size.x, this.size.y, this.color);
+		
+		for(let bullet in this.bullets) {
+			bullet.render();
+		}
 	}
+
 }
