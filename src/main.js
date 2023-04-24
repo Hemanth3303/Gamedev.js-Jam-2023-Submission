@@ -1,11 +1,10 @@
-import { WIN_WIDTH, WIN_HEIGHT } from "./config.js";
+import { WIN_WIDTH, WIN_HEIGHT, worldSpeedScale, worldSpeedScaleModifier } from "./config.js";
 import { Renderer2D } from "./renderer2d.js";
 import { loadImage } from "./utils.js";
 import { Vec2 } from "./vec2.js";
 import { Player } from "./player.js";
 
-let renderer
-
+let renderer;
 let now, prev;
 let deltaTime, fps;
 let player;
@@ -15,10 +14,15 @@ function main() {
 	let canvas=document.getElementById("canvas");
 	canvas.width=WIN_WIDTH;
 	canvas.height=WIN_HEIGHT;
-
 	
 	renderer=new Renderer2D();
-	player=new Player(new Vec2(100, 100), new Vec2(0, 0), new Vec2(20, 50), "Red", renderer);
+	player=new Player(
+		new Vec2(100, 100), 
+		new Vec2(0, 0), 
+		new Vec2(25, 25), 
+		"Red", 
+		renderer
+	);
 	now=performance.now();
 	prev=performance.now();
 
@@ -34,6 +38,23 @@ function main() {
 		}
 		if(e.key==="s") {
 			player.vel.y=1;
+		}
+		
+		if(e.key==="c") {
+			if(worldSpeedScale.value>0) {
+				worldSpeedScale.value-=worldSpeedScaleModifier;
+			}
+			if(worldSpeedScale.value<0) {
+				worldSpeedScale.value=0;
+			}
+		}
+		if(e.key==="v") {
+			if(worldSpeedScale.value<2) {
+				worldSpeedScale.value+=worldSpeedScaleModifier;
+			}
+			if(worldSpeedScale.value>2) {
+				worldSpeedScale.value=2;
+			}
 		}
 	});
 
@@ -69,8 +90,9 @@ function update(dt) {
 }
 
 function render() {
-	renderer.setFont("Consolas", 20);
-	renderer.drawText(`FPS: ${Math.round(fps)}`, 10, 24, "Grey");
+	renderer.setFont("Consolas", 24);
+	// renderer.drawText(`FPS: ${Math.round(fps)}`, 10, 24, "Grey");
+	renderer.drawText(`TimeScale: ${worldSpeedScale.value}`, 10, 24, "Cyan");
 
 	player.render(Renderer2D)
 }
