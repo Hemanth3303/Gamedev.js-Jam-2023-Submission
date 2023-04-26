@@ -122,7 +122,6 @@ function gameLoop() {
 	else {
 		if(triggerReset) {
 			reinit();
-			console.log("ji")
 		}
 	}
 	requestAnimationFrame(gameLoop);
