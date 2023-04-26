@@ -13,6 +13,7 @@ let player;
 let bullets=[], enemies=[];
 let score=0, enemyTimer=0;
 let gameOver=false;
+let triggerReset=false;
 
 function main() {
 
@@ -61,6 +62,10 @@ function main() {
 				worldSpeedScale.value=2;
 			}
 		}
+
+		if(gameOver && e.key==="r") {
+			triggerReset=true;
+		}
 	});
 
 	window.addEventListener("keyup", (e)=>{
@@ -86,6 +91,22 @@ function main() {
 	gameLoop();
 }
 
+function reinit() {
+	player=new Player(
+		new Vec2(WIN_WIDTH/2-12.5, WIN_WIDTH/2-12.5), 
+		new Vec2(0, 0), 
+		new Vec2(25, 25), 
+		"Red", 
+		renderer
+	);
+	score=0;
+	bullets=[];
+	enemies=[];
+	enemyTimer=0;
+	gameOver=false;
+	triggerReset=false;
+}
+
 function gameLoop() {
 	if(!gameOver) {
 		now=performance.now();
@@ -97,8 +118,14 @@ function gameLoop() {
 	
 		renderer.clearBackground();
 		render();
-		requestAnimationFrame(gameLoop);
 	}
+	else {
+		if(triggerReset) {
+			reinit();
+			console.log("ji")
+		}
+	}
+	requestAnimationFrame(gameLoop);
 }
 
 function update(dt) {
